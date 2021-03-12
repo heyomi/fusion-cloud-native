@@ -3,6 +3,14 @@
 # If this is not desired then change the requested values to match the limits.
 
 solr:
+  initContainer:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 64Mi
+      limits:
+        cpu: 150m
+        memory: 128Mi
   resources:
     requests:
       cpu: 800m
@@ -12,19 +20,60 @@ solr:
 
 pulsar:
   broker:
+    initContainer:
+      resources:
+        requests:
+          cpu: 100m
+          memory: 512Mi
+        limits:
+          cpu: 1
+          memory: 512Mi
     resources:
       requests:
         cpu: 300m
         memory: 2300Mi
       limits:
         memory: 2300Mi
+
   bookkeeper:
+    initContainer:
+      resources:
+        requests:
+          cpu: 100m
+          memory: 512Mi
+        limits:
+          cpu: 1
+          memory: 512Mi
     resources:
       requests:
         cpu: 300m
         memory: 2300Mi
       limits:
         memory: 2300Mi
+
+argo:
+  server:
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "50m"
+      limits:
+        memory: "256Mi"
+  controller:
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "50m"
+      limits:
+        memory: "256Mi"
+
+seldon-core-operator:
+  manager:
+    cpuLimit: 300m
+    cpuRequest: 200m
+    memoryLimit: 300Mi
+    memoryRequest: 200Mi
+
 
 admin-ui:
   resources:
@@ -35,6 +84,14 @@ admin-ui:
       memory: "32Mi"
 
 api-gateway:
+  jksSetup:
+    resources:
+      requests:
+        cpu: "400m"
+        memory: "256Mi"
+      limits:
+        cpu: "400m"
+        memory: "256Mi"
   resources:
     requests:
       cpu: "500m"
@@ -82,6 +139,14 @@ fusion-indexing:
     limits:
       memory: "1600Mi"
 
+fusion-log-forwarder:
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "64Mi"
+    limits:
+      memory: "128Mi"
+
 insights:
   resources:
     requests:
@@ -91,6 +156,22 @@ insights:
       memory: "1Gi"
 
 job-launcher:
+  sparkCleanup:
+    resources:
+      requests:
+        cpu: "50m"
+        memory: "128Mi"
+      limits:
+        cpu: "200m"
+        memory: "256Mi"
+  argoCleanup:
+    resources:
+      requests:
+        cpu: "50m"
+        memory: "128Mi"
+      limits:
+        cpu: "200m"
+        memory: "256Mi"
   resources:
     requests:
       memory: 2Gi
@@ -107,13 +188,14 @@ job-rest-server:
       memory: 1Gi
 
 ml-model-service:
-  pythonService:
+  preinstall:
     resources:
       requests:
-        memory: 1Gi
-        cpu: 300m
+        memory: 64Mi
+        cpu: 100m
       limits:
-        memory: 3Gi
+        memory: 128Mi
+        cpu: 500m
   javaService:
     resources:
       requests:
@@ -121,6 +203,15 @@ ml-model-service:
         cpu: 800m
       limits:
         memory: 3Gi
+  milvus:
+    image:
+      resources:
+        limits:
+          memory: "6Gi"
+          cpu: "2.0"
+        requests:
+          memory: "4Gi"
+          cpu: "1.0"
 
 query-pipeline:
   resources:
@@ -129,6 +220,26 @@ query-pipeline:
       memory: "2300Mi"
     limits:
       memory: "3300Mi"
+
+# if PM templating feature is being used (similar needs as query-pipeline):
+templating:
+  resources:
+    requests:
+      cpu: "700m"
+      memory: "2300Mi"
+    limits:
+      memory: "3300Mi"
+
+# if PM templating feature is not being used
+# the service is still needed but only for minimal PM functionality,
+# can use the following commented out values instead of the above:
+#templating:
+#  resources:
+#    requests:
+#      cpu: "100m"
+#      memory: "1Gi"
+#    limits:
+#      memory: "2Gi"
 
 rest-service:
   resources:
@@ -145,6 +256,15 @@ rpc-service:
       memory: "1500Mi"
     limits:
       memory: "2300Mi"
+
+pm-ui:
+  resources:
+    requests:
+      cpu: "50m"
+      memory: "8Mi"
+    limits:
+      cpu: "50m"
+      memory: "32Mi"
 
 rules-ui:
   resources:
@@ -177,3 +297,36 @@ webapps:
       memory: "800Mi"
     limits:
       memory: "1300Mi"
+
+logstash:
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 1
+    limits:
+      memory: 1Gi
+      cpu: 2
+  initContainer:
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "32Mi"
+      limits:
+        cpu: "150m"
+        memory: "64Mi"
+
+config-sync:
+    resources:
+      requests:
+        cpu: 200m
+        memory: 1Gi
+      limits:
+        memory: 2Gi
+
+connector-plugin-service:
+  resources:
+    requests:
+      cpu: "200m"
+      memory: "1500Mi"
+    limits:
+      memory: "2300Mi"
